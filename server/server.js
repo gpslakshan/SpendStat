@@ -19,6 +19,11 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
+app.get("/transactions", async (req, res) => {
+  const transactions = await Transaction.find({}).sort({ createdAt: -1 });
+  res.json({ transactions });
+});
+
 app.post("/transactions", async (req, res) => {
   const { name, amount, date } = req.body;
   const transaction = new Transaction({
@@ -27,7 +32,7 @@ app.post("/transactions", async (req, res) => {
     date,
   });
   await transaction.save();
-  res.json({ message: "Success" });
+  res.json({ statusCode: 201, message: "Success" });
 });
 
 app.listen(PORT, () => {

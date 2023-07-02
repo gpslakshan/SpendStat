@@ -17,7 +17,11 @@ const schema = z.object({
 
 type TransactionFormData = z.infer<typeof schema>;
 
-const TransactionForm = () => {
+interface Props {
+  onCreateTransaction: () => void;
+}
+
+const TransactionForm = ({ onCreateTransaction }: Props) => {
   const {
     register,
     handleSubmit,
@@ -30,6 +34,7 @@ const TransactionForm = () => {
       .post("http://localhost:8000/transactions", transaction)
       .then((res) => {
         console.log("successfully added the transaction to DB: ", res.data);
+        onCreateTransaction();
       })
       .catch((err) => {
         console.log("An error occured while creating the transaction", err);

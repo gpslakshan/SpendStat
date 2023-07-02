@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import axios from "axios";
 
 const schema = z.object({
   name: z
@@ -23,13 +24,22 @@ const TransactionForm = () => {
     formState: { errors },
   } = useForm<TransactionFormData>({ resolver: zodResolver(schema) });
 
+  const onSubmit = (transaction: TransactionFormData) => {
+    console.log("submit form data", transaction);
+    axios
+      .post("http://localhost:8000/transactions", transaction)
+      .then((res) => {
+        console.log("successfully added the transaction to DB: ", res.data);
+      })
+      .catch((err) => {
+        console.log("An error occured while creating the transaction", err);
+      });
+  };
+
   return (
     <div className="row">
       <div className="col-md-12">
-        <form
-          className="mt-3"
-          onSubmit={handleSubmit((data) => console.log(data))}
-        >
+        <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-2">
             <label htmlFor="name" className="form-label">
               Transaction Name

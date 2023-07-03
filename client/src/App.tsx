@@ -4,6 +4,7 @@ import "./App.css";
 import TransactionForm from "./components/TransactionForm";
 import { Transaction } from "./models/Transaction";
 import TransactionsGrid from "./components/TransactionsGrid";
+import Header from "./components/Header";
 
 function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -22,10 +23,22 @@ function App() {
   useEffect(fetchTransactions, []);
 
   return (
-    <div className="container">
-      <TransactionForm onCreateTransaction={fetchTransactions} />
-      <TransactionsGrid transactions={transactions} />
-    </div>
+    <>
+      <Header />
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 mt-4">Transaction By Category Chart</div>
+          <div className="col-md-6">
+            <TransactionForm onCreateTransaction={fetchTransactions} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <TransactionsGrid transactions={transactions} />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

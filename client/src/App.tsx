@@ -1,13 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import TransactionForm from "./components/TransactionForm";
+import TransactionForm, {
+  TransactionFormData,
+} from "./components/TransactionForm";
 import { Transaction } from "./models/Transaction";
 import TransactionsGrid from "./components/TransactionsGrid";
 import Header from "./components/Header";
 
 function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const onCreateTransaction = (transaction: TransactionFormData) => {
+    console.log("submit form data", transaction);
+    axios
+      .post("http://localhost:8000/transactions", transaction)
+      .then((res) => {
+        console.log("successfully added the transaction to DB: ", res.data);
+        fetchTransactions();
+      })
+      .catch((err) => {
+        console.log("An error occured while creating the transaction", err);
+      });
+  };
 
   const fetchTransactions = () => {
     axios
@@ -29,7 +44,11 @@ function App() {
         <div className="row">
           <div className="col-md-6 mt-4">Transaction By Category Chart</div>
           <div className="col-md-6">
-            <TransactionForm onCreateTransaction={fetchTransactions} />
+            <TransactionForm
+              onSubmit={(data) => {
+                onCreateTransaction(data);
+              }}
+            />
           </div>
         </div>
         <div className="row">

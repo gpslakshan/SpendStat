@@ -2,12 +2,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Button from "@mui/material/Button";
+// import TextField from "@mui/material/TextField";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import dayjs, { Dayjs } from "dayjs";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { useState } from "react";
 
 const schema = z.object({
-  name: z
-    .string()
-    .min(3, { message: "Name should be at least 3 characters" })
-    .max(60),
+  name: z.string().min(3, { message: "Name is required" }).max(60),
   amount: z.number({ invalid_type_error: "Amount is required" }).min(0.01),
   date: z.date({
     invalid_type_error: "Date is required",
@@ -53,6 +56,15 @@ const TransactionForm = ({ onSubmit }: Props) => {
             {errors.name && (
               <p className="text-danger">{errors.name.message} </p>
             )}
+            {/* <TextField
+              {...register("name")}
+              label="Transaction Name"
+              placeholder="Groceries"
+              size="small"
+              className="w-100"
+              error={!!errors.name}
+              helperText={errors.name?.message}
+            /> */}
           </div>
           <div className="mb-2">
             <label htmlFor="amount" className="form-label">
@@ -68,10 +80,19 @@ const TransactionForm = ({ onSubmit }: Props) => {
             {errors.amount && (
               <p className="text-danger">{errors.amount.message} </p>
             )}
+            {/* <TextField
+              {...register("amount", { valueAsNumber: true })}
+              label="Transaction Amount($)"
+              placeholder="120"
+              size="small"
+              className="w-100"
+              error={!!errors.amount}
+              helperText={errors.amount?.message}
+            /> */}
           </div>
           <div className="mb-2">
             <label htmlFor="date" className="form-label">
-              Transaction Date ($)
+              Transaction Date
             </label>
             <input
               {...register("date", { valueAsDate: true })}
@@ -83,9 +104,6 @@ const TransactionForm = ({ onSubmit }: Props) => {
               <p className="text-danger">{errors.date?.message}</p>
             )}
           </div>
-          {/* <button type="submit" className="btn btn-primary">
-            Submit
-          </button> */}
           <Button variant="contained" type="submit">
             Submit
           </Button>

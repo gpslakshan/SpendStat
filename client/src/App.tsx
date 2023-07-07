@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import TransactionForm, {
-  TransactionFormData,
-} from "./components/TransactionForm";
+import TransactionForm from "./components/TransactionForm";
 import { Transaction } from "./models/Transaction";
 import TransactionsGrid from "./components/TransactionsGrid";
 import Header from "./components/Header";
@@ -11,7 +9,7 @@ import Header from "./components/Header";
 function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  const onCreateTransaction = (transaction: TransactionFormData) => {
+  const onCreateTransaction = (transaction: any) => {
     console.log("submit form data", transaction);
     axios
       .post("http://localhost:8000/transactions", transaction)

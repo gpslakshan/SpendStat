@@ -1,28 +1,48 @@
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Transaction } from "../models/Transaction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Delete, Edit } from "@mui/icons-material";
 
 const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Transaction Name",
-    // width: 150,
-    flex: 1,
+    flex: 2,
     editable: false,
   },
   {
     field: "amount",
     headerName: "Transaction Amount ($)",
-    // width: 150,
     flex: 1,
     editable: false,
   },
   {
     field: "date",
     headerName: "Transaction Date",
-    // type: "date",
-    width: 150,
     flex: 1,
     editable: false,
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    // type: "actions",
+    flex: 1,
+    renderCell: () => {
+      return (
+        <Box>
+          <Tooltip title="Edit the transaction">
+            <IconButton sx={{ color: "blue" }}>
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete the transaction">
+            <IconButton sx={{ color: "red" }}>
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      );
+    },
   },
   // {
   //   field: "fullName",
@@ -57,8 +77,8 @@ const TransactionsGrid = ({ transactions }: Props) => {
               },
             }}
             pageSizeOptions={[5]}
+            disableRowSelectionOnClick
             // checkboxSelection
-            // disableRowSelectionOnClick
           />
         </div>
       </div>

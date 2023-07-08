@@ -14,6 +14,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 
 interface Props {
   transactions: Transaction[];
@@ -22,6 +23,8 @@ interface Props {
 
 const TransactionsGrid = ({ transactions, onDelete }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const { handleSubmit, control, setValue } = useForm({});
 
   const columns: GridColDef[] = [
     {
@@ -59,7 +62,10 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
           <div>
             <Box>
               <Tooltip title="Edit the transaction">
-                <IconButton sx={{ color: "blue" }} onClick={handleClickOpen}>
+                <IconButton
+                  sx={{ color: "blue" }}
+                  onClick={() => handleClickOpen(params.row)}
+                >
                   <Edit />
                 </IconButton>
               </Tooltip>
@@ -88,12 +94,21 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
     return dayjs(date).format("LL");
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (data: any) => {
+    console.log("update transaction data: ", data);
+    setValue("name", data.name, { shouldValidate: true });
+    setValue("amount", data.amount, { shouldValidate: true });
+    setValue("date", dayjs(data.date), { shouldValidate: true });
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const onFormSubmit = (data: FieldValues) => {
+    console.log("form data: ", data);
+    handleClose();
   };
 
   return (
@@ -118,43 +133,88 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
           />
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Edit Transaction</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                To Edit this transaction, please enter your new transaction
-                details here. We will send updates immediately.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Transaction Name"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Transaction Amount"
-                type="number"
-                fullWidth
-                variant="outlined"
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Transaction Date"
-                  defaultValue={dayjs("2022-04-17")}
-                  slotProps={{
-                    textField: { fullWidth: true, margin: "dense" },
-                  }}
+            <form onSubmit={handleSubmit(onFormSubmit)}>
+              <DialogContent>
+                <DialogContentText>
+                  To Edit this transaction, please enter your new transaction
+                  details here. We will send updates immediately.
+                </DialogContentText>
+
+                <Controller
+                  name="name"
+                  control={control}
+                  rules={{ required: "Transaction Name is required" }}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      helperText={error ? error.message : null}
+                      size="small"
+                      error={!!error}
+                      onChange={onChange}
+                      value={value}
+                      fullWidth
+                      label="Transaction Name"
+                      variant="outlined"
+                      margin="dense"
+                    />
+                  )}
                 />
-              </LocalizationProvider>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleClose}>Save</Button>
-            </DialogActions>
+                <Controller
+                  name="amount"
+                  control={control}
+                  rules={{ required: "Transaction Amount is required" }}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      helperText={error ? error.message : null}
+                      size="small"
+                      error={!!error}
+                      onChange={onChange}
+                      value={value}
+                      fullWidth
+                      type="number"
+                      label="Transaction Amount ($)"
+                      variant="outlined"
+                      margin="dense"
+                    />
+                  )}
+                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Controller
+                    name="date"
+                    control={control}
+                    rules={{ required: "Date is required" }}
+                    render={({ field: { onChange, value }, fieldState }) => (
+                      <DatePicker
+                        label="Transaction Date"
+                        value={value}
+                        format="DD/MM/YYYY"
+                        onChange={onChange}
+                        slotProps={{
+                          textField: {
+                            size: "small",
+                            error: !!fieldState.error,
+                            helperText: fieldState.error?.message,
+                            fullWidth: true,
+                            margin: "dense",
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} type="button">
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </DialogActions>
+            </form>
           </Dialog>
         </div>
       </div>

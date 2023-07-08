@@ -2,6 +2,7 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import { Transaction } from "../models/Transaction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 interface Props {
   transactions: Transaction[];
@@ -27,6 +28,13 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
       headerName: "Transaction Date",
       flex: 1,
       editable: false,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Box>{formatDate(params.row.date)}</Box>
+          </Box>
+        );
+      },
     },
     {
       field: "actions",
@@ -59,6 +67,10 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
     if (!window.confirm("Are you sure?")) return;
     console.log("remove id: ", id);
     onDelete(id);
+  };
+
+  const formatDate = (date: string) => {
+    return dayjs(date).format("LL");
   };
 
   return (

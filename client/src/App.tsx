@@ -33,6 +33,16 @@ function App() {
       .catch((err) => console.log(err));
   };
 
+  const deleteTransaction = (id: string) => {
+    axios
+      .delete(`http://localhost:8000/transactions/${id}`)
+      .then((res) => {
+        console.log("Transaction deleted successfully", res);
+        fetchTransactions();
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(fetchTransactions, []);
 
   return (
@@ -51,7 +61,10 @@ function App() {
         </div>
         <div className="row">
           <div className="col-md-12">
-            <TransactionsGrid transactions={transactions} />
+            <TransactionsGrid
+              transactions={transactions}
+              onDelete={deleteTransaction}
+            />
           </div>
         </div>
       </div>

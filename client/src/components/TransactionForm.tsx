@@ -4,9 +4,10 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
+import { Transaction } from "../models/Transaction";
 
 interface Props {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: Transaction) => void;
 }
 
 const TransactionForm = ({ onSubmit }: Props) => {
@@ -20,7 +21,7 @@ const TransactionForm = ({ onSubmit }: Props) => {
 
   const onFormSubmit = (data: FieldValues) => {
     console.log("form data: ", data);
-    onSubmit({ ...data, date: data.date.$d });
+    onSubmit({ ...data, date: data.date.$d } as Transaction);
     reset();
   };
 

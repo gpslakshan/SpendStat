@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "./App.css";
 import TransactionForm from "./components/TransactionForm";
 import { Transaction } from "./models/Transaction";
 import TransactionsGrid from "./components/TransactionsGrid";
 import Header from "./components/Header";
+import transactionsService from "./services/transactions-service";
 
 function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  const onCreateTransaction = (transaction: any) => {
+  const onCreateTransaction = (transaction: Transaction) => {
     console.log("submit form data", transaction);
-    axios
-      .post("http://localhost:8000/transactions", transaction)
+    transactionsService
+      .createTransaction(transaction)
       .then((res) => {
         console.log("successfully added the transaction to DB: ", res.data);
         fetchTransactions();
@@ -23,8 +23,8 @@ function App() {
   };
 
   const fetchTransactions = () => {
-    axios
-      .get("http://localhost:8000/transactions")
+    transactionsService
+      .getAllTransactions()
       .then((res) => {
         const transactions: Transaction[] = res.data.transactions;
         console.log("transactions fetched", transactions);
@@ -34,8 +34,8 @@ function App() {
   };
 
   const updateTransaction = (id: string, transaction: Transaction) => {
-    axios
-      .put(`http://localhost:8000/transactions/${id}`, transaction)
+    transactionsService
+      .updateTransaction(id, transaction)
       .then((res) => {
         console.log("Successfully updated the transaction", res);
         fetchTransactions();
@@ -44,8 +44,8 @@ function App() {
   };
 
   const deleteTransaction = (id: string) => {
-    axios
-      .delete(`http://localhost:8000/transactions/${id}`)
+    transactionsService
+      .deleteTransaction(id)
       .then((res) => {
         console.log("Transaction deleted successfully", res);
         fetchTransactions();

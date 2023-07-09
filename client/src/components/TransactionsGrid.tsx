@@ -19,10 +19,12 @@ import { FieldValues, useForm, Controller } from "react-hook-form";
 interface Props {
   transactions: Transaction[];
   onDelete: (id: string) => void;
+  onUpdate: (id: string, transaction: Transaction) => void;
 }
 
-const TransactionsGrid = ({ transactions, onDelete }: Props) => {
+const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [updateTransactionId, setUpdateTransactionId] = useState<string>("");
 
   const { handleSubmit, control, setValue } = useForm({});
 
@@ -99,6 +101,7 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
     setValue("name", data.name, { shouldValidate: true });
     setValue("amount", data.amount, { shouldValidate: true });
     setValue("date", dayjs(data.date), { shouldValidate: true });
+    setUpdateTransactionId(data._id);
     setOpen(true);
   };
 
@@ -108,6 +111,7 @@ const TransactionsGrid = ({ transactions, onDelete }: Props) => {
 
   const onFormSubmit = (data: FieldValues) => {
     console.log("form data: ", data);
+    onUpdate(updateTransactionId, data as Transaction);
     handleClose();
   };
 

@@ -33,6 +33,16 @@ function App() {
       .catch((err) => console.log(err));
   };
 
+  const updateTransaction = (id: string, transaction: Transaction) => {
+    axios
+      .put(`http://localhost:8000/transactions/${id}`, transaction)
+      .then((res) => {
+        console.log("Successfully updated the transaction", res);
+        fetchTransactions();
+      })
+      .catch((err) => console.log(err));
+  };
+
   const deleteTransaction = (id: string) => {
     axios
       .delete(`http://localhost:8000/transactions/${id}`)
@@ -63,6 +73,7 @@ function App() {
           <div className="col-md-12">
             <TransactionsGrid
               transactions={transactions}
+              onUpdate={updateTransaction}
               onDelete={deleteTransaction}
             />
           </div>

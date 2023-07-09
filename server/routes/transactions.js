@@ -24,4 +24,9 @@ router.delete("/:id", async (req, res) => {
   res.json({ message: "Success" });
 });
 
+router.put("/:id", async (req, res) => {
+  await Transaction.updateOne({ _id: req.params.id }, { $set: req.body });
+  res.json({ message: "Success" });
+});
+
 export default router;

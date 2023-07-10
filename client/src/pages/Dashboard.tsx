@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import TransactionForm from "../components/TransactionForm";
 import TransactionsGrid from "../components/TransactionsGrid";
 import transactionsService from "../services/transactions-service";
@@ -54,27 +57,29 @@ const Dashboard = () => {
   useEffect(fetchTransactions, []);
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-6 mt-4">Transaction By Category Chart</div>
-        <div className="col-md-6">
-          <TransactionForm
-            onSubmit={(data) => {
-              onCreateTransaction(data);
-            }}
-          />
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-12">
-          <TransactionsGrid
-            transactions={transactions}
-            onUpdate={updateTransaction}
-            onDelete={deleteTransaction}
-          />
-        </div>
-      </div>
-    </div>
+    <Container>
+      <Box sx={{ height: "100vh" }}>
+        <Grid container spacing={2}>
+          <Grid item md={6}>
+            <Box>Transaction By Category Chart</Box>
+          </Grid>
+          <Grid item md={6}>
+            <TransactionForm
+              onSubmit={(data) => {
+                onCreateTransaction(data);
+              }}
+            />
+          </Grid>
+          <Grid item md={12}>
+            <TransactionsGrid
+              transactions={transactions}
+              onUpdate={updateTransaction}
+              onDelete={deleteTransaction}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

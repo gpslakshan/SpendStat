@@ -20,6 +20,11 @@ const Header = () => {
               Login
             </Link>
           </Button>
+          <Button color="inherit">
+            <Link to={`register`} className="text-white">
+              Register
+            </Link>
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

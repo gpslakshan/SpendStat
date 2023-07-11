@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import "bootstrap/dist/css/bootstrap.css";
 import Login from "./pages/Login.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Signup from "./pages/Signup.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Signup />,
       },
     ],
   },

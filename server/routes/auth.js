@@ -1,6 +1,7 @@
 import { Router } from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -27,6 +28,27 @@ router.post("/signup", async (req, res) => {
   await user.save();
 
   res.status(201).json({ message: "User is created successfully" });
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(403).json({ message: "Invalid Login credentials" });
+    return;
+  }
+
+  const result = await bcrypt.compare(password, user.password);
+  if (!result) {
+    res.status(403).json({ message: "Invalid Login credentials" });
+    return;
+  }
+
+  // create jwt token
+  const payload = { username: user.email, _id: user._id };
+  const token = jwt.sign(payload, "secret");
+  res.json({ message: "success", token });
 });
 
 export default router;

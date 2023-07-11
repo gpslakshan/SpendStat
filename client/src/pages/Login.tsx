@@ -1,4 +1,3 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,15 +9,30 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { FieldValues, useForm, Controller } from "react-hook-form";
+import axios from "axios";
 
 const Login = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const { handleSubmit, reset, control } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const signInUser = async (data: any) => {
+    axios
+      .post("http://localhost:8000/auth/login", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const onFormSubmit = (data: FieldValues) => {
+    console.log("form data: ", data);
+    signInUser(data);
+    reset();
   };
 
   return (
@@ -38,26 +52,47 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onFormSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <Controller
             name="email"
-            autoComplete="email"
-            autoFocus
+            control={control}
+            rules={{ required: "Email is required" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                helperText={error ? error.message : null}
+                error={!!error}
+                onChange={onChange}
+                value={value}
+                fullWidth
+                label="Email Address"
+                variant="outlined"
+                autoFocus
+                margin="dense"
+              />
+            )}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
+          <Controller
             name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+            control={control}
+            rules={{ required: "Password is required" }}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                helperText={error ? error.message : null}
+                error={!!error}
+                onChange={onChange}
+                value={value}
+                type="password"
+                fullWidth
+                label="Password"
+                variant="outlined"
+                margin="dense"
+              />
+            )}
           />
           <Button
             type="submit"

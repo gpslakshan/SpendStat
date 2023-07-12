@@ -2,6 +2,7 @@ import { Router } from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 const router = Router();
 
@@ -47,7 +48,7 @@ router.post("/login", async (req, res) => {
 
   // create jwt token
   const payload = { username: user.email, _id: user._id };
-  const token = jwt.sign(payload, "secret");
+  const token = jwt.sign(payload, process.env.JWT_SECRET);
   res.json({ message: "success", token });
 });
 

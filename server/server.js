@@ -6,6 +6,7 @@ import AuthRouter from "./routes/auth.js";
 import connect from "./database/mongodb.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
+import "dotenv/config";
 
 const PORT = 8000;
 const app = express();

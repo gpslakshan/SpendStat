@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
+import "dotenv/config";
 
 async function connect() {
-  await mongoose.connect(
-    "mongodb+srv://sachinlakshan04:u81URhe9j5IExW4j@cluster0.bbojern.mongodb.net/?retryWrites=true&w=majority"
-  );
+  await mongoose.connect(process.env.DB_URL);
   console.log("MongoDB connection is established");
 }
 

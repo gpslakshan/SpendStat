@@ -28,6 +28,7 @@ const Login = () => {
         console.log("Login succesful", res);
         localStorage.setItem("token", res.data.token);
         navigate("/");
+        window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
       })
       .catch((err) => console.log(err));
   };

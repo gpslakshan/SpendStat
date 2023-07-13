@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { getUser } from "../store/auth-slice";
+import { getUser } from "../redux/auth-slice";
 
 const Login = () => {
   const { handleSubmit, reset, control } = useForm({

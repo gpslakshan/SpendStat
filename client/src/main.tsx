@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import router from "./routes.tsx";
 import { Provider } from "react-redux";
-import store from "./store/index.ts";
+import store from "./redux/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>

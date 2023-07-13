@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "../store/auth-slice";
+import { signOut } from "../redux/auth-slice";
 
 const Header = () => {
   const navigate = useNavigate();

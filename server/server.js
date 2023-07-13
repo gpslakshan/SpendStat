@@ -3,7 +3,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import TransactionsRouter from "./routes/transactions.js";
 import AuthRouter from "./routes/auth.js";
-import UserRouter from "./routes/user.js";
 import connect from "./database/mongodb.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
@@ -25,7 +24,6 @@ await connect();
 
 app.use("/transactions", TransactionsRouter);
 app.use("/auth", AuthRouter);
-app.use("/user", UserRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);

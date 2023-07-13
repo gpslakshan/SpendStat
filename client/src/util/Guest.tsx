@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 interface Props {
@@ -6,8 +5,8 @@ interface Props {
 }
 
 const Guest = ({ children }: Props) => {
-  const auth = useSelector((state: any) => state.auth);
-  return !auth.isAuthenticated ? children : <Navigate to="/" replace={true} />;
+  const token = localStorage.getItem("token");
+  return !token ? children : <Navigate to="/" replace={true} />;
 };
 
 export default Guest;

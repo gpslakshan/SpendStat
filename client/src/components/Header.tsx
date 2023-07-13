@@ -7,7 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signOut } from "../store/auth-slice";
 
-const Header = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const Header = ({ isLoggedIn }: Props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -15,7 +19,7 @@ const Header = () => {
     localStorage.removeItem("token");
     dispatch(signOut());
     navigate("/login", { replace: true });
-    window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
+    // window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
   };
 
   return (
@@ -27,19 +31,25 @@ const Header = () => {
               SpendStat
             </Link>
           </Typography>
-          <Button color="inherit">
-            <Link to={`login`} className="text-white">
-              Login
-            </Link>
-          </Button>
-          <Button color="inherit" onClick={logout}>
-            Logout
-          </Button>
-          <Button color="inherit">
-            <Link to={`register`} className="text-white">
-              Register
-            </Link>
-          </Button>
+          {!isLoggedIn && (
+            <Button color="inherit">
+              <Link to={`login`} className="text-white">
+                Login
+              </Link>
+            </Button>
+          )}
+          {isLoggedIn && (
+            <Button color="inherit" onClick={logout}>
+              Logout
+            </Button>
+          )}
+          {!isLoggedIn && (
+            <Button color="inherit">
+              <Link to={`register`} className="text-white">
+                Register
+              </Link>
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

@@ -11,6 +11,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getUser } from "../store/auth-slice";
 
 const Login = () => {
   const { handleSubmit, reset, control } = useForm({
@@ -20,13 +22,16 @@ const Login = () => {
     },
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const signInUser = async (data: any) => {
     axios
       .post("http://localhost:8000/auth/login", data)
       .then((res) => {
         console.log("Login succesful", res);
-        localStorage.setItem("token", res.data.token);
+        const { token, user } = res.data;
+        dispatch(getUser(user));
+        localStorage.setItem("token", token);
         navigate("/");
         window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
       })

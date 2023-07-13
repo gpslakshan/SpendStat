@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Transaction from "../models/transaction.js";
+import * as TransactionController from "../controllers/transactions.js";
 import passport from "passport";
 
 const router = Router();
@@ -7,31 +7,25 @@ const router = Router();
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    const transactions = await Transaction.find({}).sort({ createdAt: -1 });
-    res.json({ transactions });
-  }
+  TransactionController.fetchTransactions
 );
 
-router.post("/", async (req, res) => {
-  const { name, amount, date } = req.body;
-  const transaction = new Transaction({
-    amount,
-    name,
-    date,
-  });
-  await transaction.save();
-  res.json({ statusCode: 201, message: "Success" });
-});
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  TransactionController.createTransaction
+);
 
-router.delete("/:id", async (req, res) => {
-  await Transaction.deleteOne({ _id: req.params.id });
-  res.json({ message: "Success" });
-});
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  TransactionController.updateTransaction
+);
 
-router.put("/:id", async (req, res) => {
-  await Transaction.updateOne({ _id: req.params.id }, { $set: req.body });
-  res.json({ message: "Success" });
-});
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  TransactionController.deleteTransaction
+);
 
 export default router;

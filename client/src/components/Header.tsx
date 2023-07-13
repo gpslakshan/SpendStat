@@ -14,7 +14,7 @@ const Header = () => {
   const logout = () => {
     localStorage.removeItem("token");
     dispatch(signOut());
-    navigate("/login");
+    navigate("/login", { replace: true });
     window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
   };
 

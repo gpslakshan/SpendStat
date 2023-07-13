@@ -32,7 +32,7 @@ const Login = () => {
         const { token, user } = res.data;
         dispatch(getUser(user));
         localStorage.setItem("token", token);
-        navigate("/");
+        navigate("/", { replace: true });
         window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
       })
       .catch((err) => console.log(err));

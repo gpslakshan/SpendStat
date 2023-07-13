@@ -4,19 +4,17 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../store/auth-slice";
 
-interface Props {
-  isLoggedIn: boolean;
-}
-
-const Header = ({ isLoggedIn }: Props) => {
+const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const auth = useSelector((state: any) => state.auth);
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     dispatch(signOut());
     navigate("/login", { replace: true });
     // window.location.reload(); //Axios Header not updated. User needs to manually reload page in React
@@ -31,19 +29,19 @@ const Header = ({ isLoggedIn }: Props) => {
               SpendStat
             </Link>
           </Typography>
-          {!isLoggedIn && (
+          {!auth.isAuthenticated && (
             <Button color="inherit">
               <Link to={`login`} className="text-white">
                 Login
               </Link>
             </Button>
           )}
-          {isLoggedIn && (
+          {auth.isAuthenticated && (
             <Button color="inherit" onClick={logout}>
               Logout
             </Button>
           )}
-          {!isLoggedIn && (
+          {!auth.isAuthenticated && (
             <Button color="inherit">
               <Link to={`register`} className="text-white">
                 Register

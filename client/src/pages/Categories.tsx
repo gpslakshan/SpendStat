@@ -1,10 +1,30 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
+import categoriesService from "../services/categories-service";
+import { setUser } from "../redux/auth-slice";
 
 const Categories = () => {
+  const dispatch = useDispatch();
   const { categories } = useSelector((state: any) => state.auth.user);
+
+  const removeTransaction = (id: string) => {
+    if (!window.confirm("Are you sure?")) return;
+    console.log("remove id: ", id);
+    categoriesService
+      .deleteCategory(id)
+      .then((res) => {
+        console.log("Category deleted successfully", res);
+        const user = res.data.user;
+        console.log(user);
+        dispatch(setUser(user));
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((err) =>
+        console.log("An error occured while deleting the category", err)
+      );
+  };
 
   const columns: GridColDef[] = [
     {
@@ -38,7 +58,7 @@ const Categories = () => {
             <Tooltip title="Delete the transaction">
               <IconButton
                 sx={{ color: "red" }}
-                // onClick={() => removeTransaction(params.row._id)}
+                onClick={() => removeTransaction(params.row._id)}
               >
                 <Delete />
               </IconButton>

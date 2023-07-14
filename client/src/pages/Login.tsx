@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { getUser } from "../redux/auth-slice";
+import { setUser } from "../redux/auth-slice";
 
 const Login = () => {
   const { handleSubmit, reset, control } = useForm({
@@ -30,7 +30,7 @@ const Login = () => {
       .then((res) => {
         console.log("Login succesful", res);
         const { token, user } = res.data;
-        dispatch(getUser(user));
+        dispatch(setUser(user));
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/", { replace: true });

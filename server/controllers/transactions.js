@@ -1,13 +1,16 @@
 import Transaction from "../models/transaction.js";
 
 export const fetchTransactions = async (req, res) => {
-  const transactions = await Transaction.find({}).sort({ createdAt: -1 });
+  const transactions = await Transaction.find({ user_id: req.user._id }).sort({
+    createdAt: -1,
+  });
   res.json({ transactions });
 };
 
 export const createTransaction = async (req, res) => {
   const { name, amount, date } = req.body;
   const transaction = new Transaction({
+    user_id: req.user._id,
     amount,
     name,
     date,

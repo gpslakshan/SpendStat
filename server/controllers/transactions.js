@@ -8,12 +8,13 @@ export const fetchTransactions = async (req, res) => {
 };
 
 export const createTransaction = async (req, res) => {
-  const { name, amount, date } = req.body;
+  const { name, amount, date, category_id } = req.body;
   const transaction = new Transaction({
     user_id: req.user._id,
     amount,
     name,
     date,
+    category_id,
   });
   await transaction.save();
   res.json({ statusCode: 201, message: "Success" });

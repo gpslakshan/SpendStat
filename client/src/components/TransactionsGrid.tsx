@@ -15,6 +15,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { FieldValues, useForm, Controller } from "react-hook-form";
+import MenuItem from "@mui/material/MenuItem";
+import { useSelector } from "react-redux";
 
 interface Props {
   transactions: Transaction[];
@@ -28,11 +30,19 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
 
   const { handleSubmit, control, setValue } = useForm({});
 
+  const { categories } = useSelector((state: any) => state.auth.user);
+
   const columns: GridColDef[] = [
     {
       field: "name",
       headerName: "Transaction Name",
-      flex: 2,
+      flex: 1,
+      editable: false,
+    },
+    {
+      field: "category_id",
+      headerName: "Transaction Category",
+      flex: 1,
       editable: false,
     },
     {
@@ -101,6 +111,7 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
     setValue("name", data.name, { shouldValidate: true });
     setValue("amount", data.amount, { shouldValidate: true });
     setValue("date", dayjs(data.date), { shouldValidate: true });
+    setValue("category_id", data.category_id, { shouldValidate: true });
     setUpdateTransactionId(data._id);
     setOpen(true);
   };
@@ -211,6 +222,34 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
                     )}
                   />
                 </LocalizationProvider>
+
+                <Controller
+                  name="category_id"
+                  control={control}
+                  rules={{ required: "Category is required" }}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      select
+                      label="Transaction Category"
+                      helperText={error ? error.message : null}
+                      size="small"
+                      error={!!error}
+                      value={value}
+                      onChange={onChange}
+                      fullWidth
+                      margin="dense"
+                    >
+                      {categories.map((option: any) => (
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} type="button">

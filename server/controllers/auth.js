@@ -3,6 +3,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
+const categories = [
+  { id: "1", label: "Travel", icon: "A" },
+  { id: "2", label: "Bills", icon: "B" },
+  { id: "2", label: "Shopping", icon: "C" },
+  { id: "2", label: "Investment", icon: "D" },
+];
+
 export const signup = async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
 
@@ -22,6 +29,7 @@ export const signup = async (req, res) => {
     firstName,
     lastName,
     password: hashedPassword,
+    categories,
   });
   await user.save();
 

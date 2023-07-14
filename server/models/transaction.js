@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const transactionSchema = new Schema({
   user_id: mongoose.Types.ObjectId,
+  category_id: mongoose.Types.ObjectId,
   amount: Number,
   name: String,
   date: { type: Date, default: Date.now },

@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { Transaction } from "../models/Transaction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
@@ -44,6 +44,9 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
       headerName: "Transaction Category",
       flex: 1,
       editable: false,
+      renderCell: (params) => {
+        return <Box>{getCategoryById(params.row.category_id)}</Box>;
+      },
     },
     {
       field: "amount",
@@ -106,6 +109,11 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
     return dayjs(date).format("LL");
   };
 
+  const getCategoryById = (id: string) => {
+    const category = categories.find((category: any) => category._id === id);
+    return category.label || "NA";
+  };
+
   const handleClickOpen = (data: any) => {
     console.log("update transaction data: ", data);
     setValue("name", data.name, { shouldValidate: true });
@@ -128,139 +136,139 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
 
   return (
     <>
-      <h2 className="mt-5">All Transactions</h2>
-      <div className="row">
-        <div className="col-md-12">
-          <DataGrid
-            rows={transactions}
-            columns={columns}
-            getRowId={(row) => row._id}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
+      <Typography variant="h4" sx={{ marginBottom: "1rem", marginTop: "3rem" }}>
+        All Transactions
+      </Typography>
+      <Box>
+        <DataGrid
+          rows={transactions}
+          columns={columns}
+          getRowId={(row) => row._id}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
               },
-            }}
-            pageSizeOptions={[5]}
-            disableRowSelectionOnClick
-            // checkboxSelection
-          />
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Edit Transaction</DialogTitle>
-            <form onSubmit={handleSubmit(onFormSubmit)}>
-              <DialogContent>
-                <DialogContentText>
-                  To Edit this transaction, please enter your new transaction
-                  details here. We will send updates immediately.
-                </DialogContentText>
+            },
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+          // checkboxSelection
+        />
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Edit Transaction</DialogTitle>
+          <Box component="form" onSubmit={handleSubmit(onFormSubmit)}>
+            <DialogContent>
+              <DialogContentText>
+                To Edit this transaction, please enter your new transaction
+                details here. We will send updates immediately.
+              </DialogContentText>
 
-                <Controller
-                  name="name"
-                  control={control}
-                  rules={{ required: "Transaction Name is required" }}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      helperText={error ? error.message : null}
-                      size="small"
-                      error={!!error}
-                      onChange={onChange}
-                      value={value}
-                      fullWidth
-                      label="Transaction Name"
-                      variant="outlined"
-                      margin="dense"
-                    />
-                  )}
-                />
-                <Controller
-                  name="amount"
-                  control={control}
-                  rules={{ required: "Transaction Amount is required" }}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      helperText={error ? error.message : null}
-                      size="small"
-                      error={!!error}
-                      onChange={onChange}
-                      value={value}
-                      fullWidth
-                      type="number"
-                      label="Transaction Amount ($)"
-                      variant="outlined"
-                      margin="dense"
-                    />
-                  )}
-                />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Controller
-                    name="date"
-                    control={control}
-                    rules={{ required: "Date is required" }}
-                    render={({ field: { onChange, value }, fieldState }) => (
-                      <DatePicker
-                        label="Transaction Date"
-                        value={value}
-                        format="DD/MM/YYYY"
-                        onChange={onChange}
-                        slotProps={{
-                          textField: {
-                            size: "small",
-                            error: !!fieldState.error,
-                            helperText: fieldState.error?.message,
-                            fullWidth: true,
-                            margin: "dense",
-                          },
-                        }}
-                      />
-                    )}
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: "Transaction Name is required" }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    helperText={error ? error.message : null}
+                    size="small"
+                    error={!!error}
+                    onChange={onChange}
+                    value={value}
+                    fullWidth
+                    label="Transaction Name"
+                    variant="outlined"
+                    margin="dense"
                   />
-                </LocalizationProvider>
-
+                )}
+              />
+              <Controller
+                name="amount"
+                control={control}
+                rules={{ required: "Transaction Amount is required" }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    helperText={error ? error.message : null}
+                    size="small"
+                    error={!!error}
+                    onChange={onChange}
+                    value={value}
+                    fullWidth
+                    type="number"
+                    label="Transaction Amount ($)"
+                    variant="outlined"
+                    margin="dense"
+                  />
+                )}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Controller
-                  name="category_id"
+                  name="date"
                   control={control}
-                  rules={{ required: "Category is required" }}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <TextField
-                      select
-                      label="Transaction Category"
-                      helperText={error ? error.message : null}
-                      size="small"
-                      error={!!error}
+                  rules={{ required: "Date is required" }}
+                  render={({ field: { onChange, value }, fieldState }) => (
+                    <DatePicker
+                      label="Transaction Date"
                       value={value}
+                      format="DD/MM/YYYY"
                       onChange={onChange}
-                      fullWidth
-                      margin="dense"
-                    >
-                      {categories.map((option: any) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          error: !!fieldState.error,
+                          helperText: fieldState.error?.message,
+                          fullWidth: true,
+                          margin: "dense",
+                        },
+                      }}
+                    />
                   )}
                 />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} type="button">
-                  Cancel
-                </Button>
-                <Button type="submit">Save</Button>
-              </DialogActions>
-            </form>
-          </Dialog>
-        </div>
-      </div>
+              </LocalizationProvider>
+
+              <Controller
+                name="category_id"
+                control={control}
+                rules={{ required: "Category is required" }}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    select
+                    label="Transaction Category"
+                    helperText={error ? error.message : null}
+                    size="small"
+                    error={!!error}
+                    value={value}
+                    onChange={onChange}
+                    fullWidth
+                    margin="dense"
+                  >
+                    {categories.map((option: any) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} type="button">
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </DialogActions>
+          </Box>
+        </Dialog>
+      </Box>
     </>
   );
 };

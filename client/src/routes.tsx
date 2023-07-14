@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CheckAuth from "./util/CheckAuth";
 import Guest from "./util/Guest";
+import Categories from "./pages/Categories";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,14 @@ const router = createBrowserRouter([
         element: (
           <CheckAuth>
             <Dashboard />
+          </CheckAuth>
+        ),
+      },
+      {
+        path: "/categories",
+        element: (
+          <CheckAuth>
+            <Categories />
           </CheckAuth>
         ),
       },

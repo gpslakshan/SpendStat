@@ -37,6 +37,13 @@ const Header = () => {
             </Button>
           )}
           {auth.isAuthenticated && (
+            <Button color="inherit">
+              <Link to={`/categories`} className="text-white">
+                Categories
+              </Link>
+            </Button>
+          )}
+          {auth.isAuthenticated && (
             <Button color="inherit" onClick={logout}>
               Logout
             </Button>

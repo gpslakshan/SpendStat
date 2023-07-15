@@ -18,9 +18,17 @@ interface Props {
   onClose: () => void;
   onCreate: (data: Category) => void;
   data: Category | null;
+  onUpdate: (id: string, data: Category) => void;
 }
 
-const CategoryForm = ({ open, onClose, mode, data, onCreate }: Props) => {
+const CategoryForm = ({
+  open,
+  onClose,
+  mode,
+  data,
+  onCreate,
+  onUpdate,
+}: Props) => {
   const { handleSubmit, reset, control, setValue } = useForm({
     defaultValues: {
       label: "",
@@ -42,11 +50,12 @@ const CategoryForm = ({ open, onClose, mode, data, onCreate }: Props) => {
     { name: "E" },
   ];
 
-  const handleFormSubmit = (data: FieldValues) => {
-    console.log("form data: ", data);
+  const handleFormSubmit = (formData: FieldValues) => {
+    console.log("form data: ", formData);
     if (mode === "create") {
-      onCreate(data as Category);
+      onCreate(formData as Category);
     } else {
+      onUpdate(data?._id || "", formData as Category);
     }
     reset();
     onClose();

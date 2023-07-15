@@ -10,6 +10,16 @@ export const createCategory = async (req, res) => {
   res.json({ message: "Success", user });
 };
 
+export const updateCategory = async (req, res) => {
+  const { label, icon } = req.body;
+  await User.updateOne(
+    { _id: req.user._id, "categories._id": req.params.id },
+    { $set: { "categories.$.label": label, "categories.$.icon": icon } }
+  );
+  const user = await User.findOne({ _id: req.user._id });
+  res.json({ message: "Success", user });
+};
+
 export const deleteCategory = async (req, res) => {
   const categories = req.user.categories;
   const newCategories = categories.filter(

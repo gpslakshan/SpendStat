@@ -30,7 +30,7 @@ const Categories = () => {
     setOpen(false);
   };
 
-  const createTransaction = (data: Category) => {
+  const createCategory = (data: Category) => {
     categoriesService
       .createCategory(data)
       .then((res) => {
@@ -45,7 +45,22 @@ const Categories = () => {
       });
   };
 
-  const removeTransaction = (id: string) => {
+  const updateCategory = (id: string, updatedData: Category) => {
+    categoriesService
+      .updateCategory(id, updatedData)
+      .then((res) => {
+        console.log("category updated successfully", res);
+        const user = res.data.user;
+        console.log(user);
+        dispatch(setUser(user));
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((err) => {
+        console.log("An error occured while updating the category", err);
+      });
+  };
+
+  const removeCategory = (id: string) => {
     if (!window.confirm("Are you sure?")) return;
     console.log("remove id: ", id);
     categoriesService
@@ -86,7 +101,9 @@ const Categories = () => {
             <Tooltip title="Edit the transaction">
               <IconButton
                 sx={{ color: "blue" }}
-                onClick={() => handleClickOpen("edit", params.row)}
+                onClick={() => {
+                  handleClickOpen("edit", params.row);
+                }}
               >
                 <Edit />
               </IconButton>
@@ -94,7 +111,7 @@ const Categories = () => {
             <Tooltip title="Delete the transaction">
               <IconButton
                 sx={{ color: "red" }}
-                onClick={() => removeTransaction(params.row._id)}
+                onClick={() => removeCategory(params.row._id)}
               >
                 <Delete />
               </IconButton>
@@ -139,8 +156,9 @@ const Categories = () => {
         mode={mode}
         data={categoryData}
         open={open}
-        onCreate={createTransaction}
+        onCreate={createCategory}
         onClose={handleClose}
+        onUpdate={updateCategory}
       />
     </Container>
   );

@@ -10,9 +10,9 @@ class CategoriesService {
   //     return apiClient.get("/transactions");
   //   }
 
-  //   updateTransaction(id: string, transaction: Transaction) {
-  //     return apiClient.put(`/transactions/${id}`, transaction);
-  //   }
+  updateCategory(id: string, category: Category) {
+    return apiClient.put(`/categories/${id}`, category);
+  }
 
   deleteCategory(id: string) {
     return apiClient.delete(`/categories/${id}`);

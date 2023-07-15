@@ -10,6 +10,12 @@ router.post(
   CategoriesController.createCategory
 );
 
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  CategoriesController.updateCategory
+);
+
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),

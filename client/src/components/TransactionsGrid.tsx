@@ -111,7 +111,7 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
 
   const getCategoryById = (id: string) => {
     const category = categories.find((category: any) => category._id === id);
-    return category.label || "NA";
+    return category ? category.label : "NA";
   };
 
   const handleClickOpen = (data: any) => {

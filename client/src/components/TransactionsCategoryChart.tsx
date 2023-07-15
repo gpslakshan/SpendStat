@@ -52,7 +52,7 @@ const TransactionsCategoryChart = ({ categorizedTransactions }: Props) => {
         className="chart"
         options={{
           aspectRatio: 1.2, // reduce whitespaces and adjust height accordingly
-          cutout: 120, // thickness of the doghnut
+          cutout: 100, // thickness of the doghnut
           plugins: {
             colors: {
               forceOverride: true,

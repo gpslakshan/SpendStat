@@ -7,10 +7,25 @@ import {
   Box,
   TextField,
   MenuItem,
+  Icon,
+  Tooltip,
 } from "@mui/material";
 import { Category } from "../models/Category";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import {
+  AddHomeWork,
+  Commute,
+  Fastfood,
+  LiveTv,
+  MedicalServices,
+  MiscellaneousServices,
+  Paid,
+  Pool,
+  RequestQuote,
+  Security,
+  Work,
+} from "@mui/icons-material";
 
 interface Props {
   mode: string;
@@ -43,11 +58,17 @@ const CategoryForm = ({
   }, [mode, open]);
 
   const icons = [
-    { name: "A" },
-    { name: "B" },
-    { name: "C" },
-    { name: "D" },
-    { name: "E" },
+    { name: "Housing", icon: AddHomeWork },
+    { name: "Transportation", icon: Commute },
+    { name: "Food", icon: Fastfood },
+    { name: "Utilities", icon: RequestQuote },
+    { name: "Insurance", icon: Security },
+    { name: "Medical & Healthcare", icon: MedicalServices },
+    { name: "Investment", icon: Work },
+    { name: "Personal Spending", icon: Paid },
+    { name: "Recreation", icon: Pool },
+    { name: "Entertainment", icon: LiveTv },
+    { name: "Miscellaneous", icon: MiscellaneousServices },
   ];
 
   const handleFormSubmit = (formData: FieldValues) => {
@@ -114,7 +135,9 @@ const CategoryForm = ({
               >
                 {icons.map((option: any) => (
                   <MenuItem key={option.name} value={option.name}>
-                    {option.name}
+                    <Tooltip title={option.name}>
+                      <Icon component={option.icon} />
+                    </Tooltip>
                   </MenuItem>
                 ))}
               </TextField>

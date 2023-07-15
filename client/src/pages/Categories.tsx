@@ -1,13 +1,48 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import {
+  Box,
+  Container,
+  Icon,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import {
+  AddHomeWork,
+  Commute,
+  Delete,
+  Edit,
+  Fastfood,
+  LiveTv,
+  MedicalServices,
+  MiscellaneousServices,
+  Paid,
+  Pool,
+  RequestQuote,
+  Security,
+  Work,
+} from "@mui/icons-material";
 import categoriesService from "../services/categories-service";
 import { setUser } from "../redux/auth-slice";
 import Button from "@mui/material/Button";
 import CategoryForm from "../components/CategoryForm";
 import { Category } from "../models/Category";
+
+const icons = [
+  { name: "Housing", icon: AddHomeWork },
+  { name: "Transportation", icon: Commute },
+  { name: "Food", icon: Fastfood },
+  { name: "Utilities", icon: RequestQuote },
+  { name: "Insurance", icon: Security },
+  { name: "Medical & Healthcare", icon: MedicalServices },
+  { name: "Investment", icon: Work },
+  { name: "Personal Spending", icon: Paid },
+  { name: "Recreation", icon: Pool },
+  { name: "Entertainment", icon: LiveTv },
+  { name: "Miscellaneous", icon: MiscellaneousServices },
+];
 
 const Categories = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -89,6 +124,11 @@ const Categories = () => {
       headerName: "Category Icon",
       flex: 1,
       editable: false,
+      renderCell: (params) => {
+        const icon = icons.filter((icon) => icon.name == params.row.icon)[0]
+          .icon;
+        return <Icon component={icon}></Icon>;
+      },
     },
     {
       field: "actions",

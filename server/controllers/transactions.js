@@ -29,3 +29,27 @@ export const deleteTransaction = async (req, res) => {
   await Transaction.deleteOne({ _id: req.params.id });
   res.json({ message: "Success" });
 };
+
+export const getCategorizedTransactions = async (req, res) => {
+  const categorizedTransactions = await Transaction.aggregate([
+    {
+      $match: { user_id: req.user._id },
+    },
+    {
+      $group: {
+        _id: { category: "$category_id" },
+        transactions: {
+          $push: {
+            amount: "$amount",
+            name: "$name",
+            date: "$date",
+          },
+        },
+        totalExpenses: {
+          $sum: "$amount",
+        },
+      },
+    },
+  ]);
+  res.json({ categorizedTransactions });
+};

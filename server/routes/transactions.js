@@ -28,4 +28,10 @@ router.delete(
   TransactionController.deleteTransaction
 );
 
+router.get(
+  "/categorized",
+  passport.authenticate("jwt", { session: false }),
+  TransactionController.getCategorizedTransactions
+);
+
 export default router;

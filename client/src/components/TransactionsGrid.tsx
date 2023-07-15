@@ -136,7 +136,7 @@ const TransactionsGrid = ({ transactions, onDelete, onUpdate }: Props) => {
 
   return (
     <>
-      <Typography variant="h4" sx={{ marginBottom: "1rem", marginTop: "3rem" }}>
+      <Typography variant="h4" sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
         All Transactions
       </Typography>
       <Box>

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { Transaction } from "../models/Transaction";
 import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   onSubmit: (data: Transaction) => void;
@@ -32,104 +33,109 @@ const TransactionForm = ({ onSubmit }: Props) => {
   };
 
   return (
-    <Box
-      component="form"
-      className="mt-3"
-      onSubmit={handleSubmit(onFormSubmit)}
-      sx={{ display: "flex", flexDirection: "column" }}
-    >
-      <Controller
-        name="name"
-        control={control}
-        rules={{ required: "Transaction Name is required" }}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <TextField
-            helperText={error ? error.message : null}
-            size="small"
-            error={!!error}
-            onChange={onChange}
-            value={value}
-            fullWidth
-            label="Transaction Name"
-            variant="outlined"
-            sx={{ marginBottom: "1rem" }}
-          />
-        )}
-      />
-
-      <Controller
-        name="amount"
-        control={control}
-        rules={{ required: "Transaction Amount is required" }}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <TextField
-            helperText={error ? error.message : null}
-            size="small"
-            error={!!error}
-            onChange={onChange}
-            value={value}
-            fullWidth
-            type="number"
-            label="Transaction Amount ($)"
-            variant="outlined"
-            sx={{ marginBottom: "1rem" }}
-          />
-        )}
-      />
-
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Box>
+      <Typography variant="h5" sx={{ marginTop: "1rem", marginBottom: "3rem" }}>
+        Add New Transaction
+      </Typography>
+      <Box
+        component="form"
+        className="mt-3"
+        onSubmit={handleSubmit(onFormSubmit)}
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
         <Controller
-          name="date"
+          name="name"
           control={control}
-          rules={{ required: "Date is required" }}
-          render={({ field: { onChange, value }, fieldState }) => (
-            <DatePicker
-              label="Transaction Date"
-              value={value}
-              format="DD/MM/YYYY"
+          rules={{ required: "Transaction Name is required" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              helperText={error ? error.message : null}
+              size="small"
+              error={!!error}
               onChange={onChange}
-              slotProps={{
-                textField: {
-                  size: "small",
-                  error: !!fieldState.error,
-                  helperText: fieldState.error?.message,
-                  fullWidth: true,
-                },
-              }}
+              value={value}
+              fullWidth
+              label="Transaction Name"
+              variant="outlined"
               sx={{ marginBottom: "1rem" }}
             />
           )}
         />
-      </LocalizationProvider>
 
-      <Controller
-        name="category_id"
-        control={control}
-        rules={{ required: "Category is required" }}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <TextField
-            select
-            label="Transaction Category"
-            helperText={error ? error.message : null}
-            size="small"
-            error={!!error}
-            value={value}
-            onChange={onChange}
-            fullWidth
-            sx={{ marginBottom: "1rem" }}
-          >
-            {categories.map((option: any) => (
-              <MenuItem key={option._id} value={option._id}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
-      />
+        <Controller
+          name="amount"
+          control={control}
+          rules={{ required: "Transaction Amount is required" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              helperText={error ? error.message : null}
+              size="small"
+              error={!!error}
+              onChange={onChange}
+              value={value}
+              fullWidth
+              type="number"
+              label="Transaction Amount ($)"
+              variant="outlined"
+              sx={{ marginBottom: "1rem" }}
+            />
+          )}
+        />
 
-      <Button variant="contained" type="submit">
-        Submit
-      </Button>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Controller
+            name="date"
+            control={control}
+            rules={{ required: "Date is required" }}
+            render={({ field: { onChange, value }, fieldState }) => (
+              <DatePicker
+                label="Transaction Date"
+                value={value}
+                format="DD/MM/YYYY"
+                onChange={onChange}
+                slotProps={{
+                  textField: {
+                    size: "small",
+                    error: !!fieldState.error,
+                    helperText: fieldState.error?.message,
+                    fullWidth: true,
+                  },
+                }}
+                sx={{ marginBottom: "1rem" }}
+              />
+            )}
+          />
+        </LocalizationProvider>
+
+        <Controller
+          name="category_id"
+          control={control}
+          rules={{ required: "Category is required" }}
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              select
+              label="Transaction Category"
+              helperText={error ? error.message : null}
+              size="small"
+              error={!!error}
+              value={value}
+              onChange={onChange}
+              fullWidth
+              sx={{ marginBottom: "1rem" }}
+            >
+              {categories.map((option: any) => (
+                <MenuItem key={option._id} value={option._id}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+        />
+
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
+      </Box>
     </Box>
   );
 };

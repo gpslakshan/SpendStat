@@ -17,6 +17,10 @@ class TransactionsService {
   deleteTransaction(id: string) {
     return apiClient.delete(`/transactions/${id}`);
   }
+
+  getCategorizedTransactions() {
+    return apiClient.get("/transactions/categorized");
+  }
 }
 
 export default new TransactionsService();

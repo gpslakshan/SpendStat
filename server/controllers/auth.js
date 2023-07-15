@@ -4,10 +4,17 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const categories = [
-  { id: "1", label: "Travel", icon: "A" },
-  { id: "2", label: "Bills", icon: "B" },
-  { id: "2", label: "Shopping", icon: "C" },
-  { id: "2", label: "Investment", icon: "D" },
+  { label: "Housing", icon: "Housing" },
+  { label: "Transportation", icon: "Transportation" },
+  { label: "Food", icon: "Food" },
+  { label: "Utilities", icon: "Utilities" },
+  { label: "Insurance", icon: "Insurance" },
+  { label: "Medical & Healthcare", icon: "Medical & Healthcare" },
+  { label: "Investment", icon: "Investment" },
+  { label: "Personal Spending", icon: "Personal Spending" },
+  { label: "Recreation", icon: "Recreation" },
+  { label: "Entertainment", icon: "Entertainment" },
+  { label: "Miscellaneous", icon: "Miscellaneous" },
 ];
 
 export const signup = async (req, res) => {

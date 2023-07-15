@@ -1,5 +1,15 @@
 import User from "../models/user.js";
 
+export const createCategory = async (req, res) => {
+  const { label, icon } = req.body;
+  await User.updateOne(
+    { _id: req.user._id },
+    { $set: { categories: [...req.user.categories, { label, icon }] } }
+  );
+  const user = await User.findOne({ _id: req.user._id });
+  res.json({ message: "Success", user });
+};
+
 export const deleteCategory = async (req, res) => {
   const categories = req.user.categories;
   const newCategories = categories.filter(
@@ -10,5 +20,5 @@ export const deleteCategory = async (req, res) => {
     { $set: { categories: newCategories } }
   );
   const user = await User.findOne({ _id: req.user._id });
-  res.json({ message: "Success", user, newCategories });
+  res.json({ message: "Success", user });
 };

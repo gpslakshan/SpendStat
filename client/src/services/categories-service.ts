@@ -1,10 +1,10 @@
-// import { Category } from "../models/Category";
+import { Category } from "../models/Category";
 import apiClient from "./api-client";
 
 class CategoriesService {
-  //   createTransaction(transaction: Transaction) {
-  //     return apiClient.post("/transactions", transaction);
-  //   }
+  createCategory(category: Category) {
+    return apiClient.post("/categories", category);
+  }
 
   //   getAllTransactions() {
   //     return apiClient.get("/transactions");

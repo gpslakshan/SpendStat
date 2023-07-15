@@ -1,13 +1,49 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Container, IconButton, Tooltip, Typography } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import categoriesService from "../services/categories-service";
 import { setUser } from "../redux/auth-slice";
+import Button from "@mui/material/Button";
+import CategoryForm from "../components/CategoryForm";
+import { Category } from "../models/Category";
 
 const Categories = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [mode, setMode] = useState<string>("create");
+  const [categoryData, setCategoryData] = useState<Category | null>(null);
   const dispatch = useDispatch();
   const { categories } = useSelector((state: any) => state.auth.user);
+
+  const handleClickOpen = (mode: string, data: Category | null = null) => {
+    setMode(mode);
+    if (mode === "edit") {
+      setCategoryData(data);
+    } else {
+      setCategoryData(null);
+    }
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const createTransaction = (data: Category) => {
+    categoriesService
+      .createCategory(data)
+      .then((res) => {
+        console.log("category created successfully", res);
+        const user = res.data.user;
+        console.log(user);
+        dispatch(setUser(user));
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((err) => {
+        console.log("An error occured while creating the category", err);
+      });
+  };
 
   const removeTransaction = (id: string) => {
     if (!window.confirm("Are you sure?")) return;
@@ -50,7 +86,7 @@ const Categories = () => {
             <Tooltip title="Edit the transaction">
               <IconButton
                 sx={{ color: "blue" }}
-                // onClick={() => handleClickOpen(params.row)}
+                onClick={() => handleClickOpen("edit", params.row)}
               >
                 <Edit />
               </IconButton>
@@ -71,9 +107,19 @@ const Categories = () => {
 
   return (
     <Container>
-      <Typography variant="h4" sx={{ marginBottom: "1rem", marginTop: "3rem" }}>
-        List of Categories
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "1rem",
+          marginTop: "3rem",
+        }}
+      >
+        <Typography variant="h4">List of Categories</Typography>
+        <Button variant="contained" onClick={() => handleClickOpen("create")}>
+          Add new Category
+        </Button>
+      </Box>
       <DataGrid
         rows={categories}
         columns={columns}
@@ -88,6 +134,13 @@ const Categories = () => {
         pageSizeOptions={[10]}
         disableRowSelectionOnClick
         // checkboxSelection
+      />
+      <CategoryForm
+        mode={mode}
+        data={categoryData}
+        open={open}
+        onCreate={createTransaction}
+        onClose={handleClose}
       />
     </Container>
   );

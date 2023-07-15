@@ -4,6 +4,12 @@ import passport from "passport";
 
 const router = Router();
 
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  CategoriesController.createCategory
+);
+
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),

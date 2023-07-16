@@ -4,5 +4,5 @@ SpendStat is a MERN Stack Expense Tracker Application.
 
 # Login Credentials
 
-username -> johdoe@email.com  
+username -> johndoe@email.com  
 password - > 12345
